@@ -7,15 +7,26 @@
 //
 
 import UIKit
+import SwiftlySalesforce
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, LoginViewPresentable {
 
+    /// Salesforce Connected App settings
+    let consumerKey = "3MVG9szVa2RxsqBZuGWBDcuvhuQ_QxQ7Ad58ospmsyKRpbbzPETSjVtQQSHHC1FLgz6Idje_71xyhxxrUFeJm"
+    let redirectURL = NSURL(string: "swiftforce1://authorized")!
+    
     var window: UIWindow?
-
-
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        // Configure the Salesforce authentication manager with Connected App settings
+        OAuth2Manager.sharedInstance.configureWithConsumerKey(consumerKey, redirectURL: redirectURL)
+        OAuth2Manager.sharedInstance.authenticationDelegate = self
+        return true
+    }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        handleRedirectURL(url)
         return true
     }
 
